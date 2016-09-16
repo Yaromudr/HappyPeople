@@ -15,7 +15,10 @@ public class Main {
         String path = scanner.nextLine();
 
         String maxLengthStr = getMaxLengthStringFromFile(path);
+        System.out.println(format("Longest string line without the spaces: %s", maxLengthStr));
         char charStr = getCharAtMiddleIndex(maxLengthStr);
+
+        System.out.println(format("Middle letter: %s", charStr));
 
         System.out.println(format("Write a word that starts for: %s", charStr));
 
@@ -33,23 +36,30 @@ public class Main {
      */
     private static String getMaxLengthStringFromFile(String path) {
         String maxLengthStr = "";
+        String maxLengthStrWithSpaces = "";
         Map<String, Integer> map = new HashMap<>();
+        Map<String, String> mapWhitSpaces = new HashMap<>();
         File file = new File(path);
 
         try (Scanner scanner = new Scanner(file)) {
+            String stringFromFileWithSpaces = null;
             String stringFromFile = null;
 
             while (scanner.hasNext()) {
-                stringFromFile = scanner.nextLine();
-                stringFromFile = stringFromFile.trim().replace(" ", "");
+                stringFromFileWithSpaces = scanner.nextLine();
+                stringFromFile = stringFromFileWithSpaces.trim().replace(" ", "");
                 map.put(stringFromFile, stringFromFile.length());
+                mapWhitSpaces.put(stringFromFile, stringFromFileWithSpaces);
             }
 
             for (Map.Entry<String, Integer> entry : map.entrySet()) {
-                if (entry.getValue() > maxLengthStr.length())
+                if (entry.getValue() > maxLengthStr.length()){
                     maxLengthStr = entry.getKey();
-            }
+                    maxLengthStrWithSpaces = mapWhitSpaces.get(maxLengthStr);
+                }
 
+            }
+            System.out.println(format("Longest string line with the spaces: %s", maxLengthStrWithSpaces));
             return maxLengthStr;
         } catch (IOException e) {
             System.err.println("Error in process reading file");
